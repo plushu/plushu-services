@@ -1,0 +1,1 @@
+export PLUSHU_SERVICES_DIR=$PLUSHU_DIR/services

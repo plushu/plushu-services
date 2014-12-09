@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+service=$1
+service_dir="$PLUSHU_SERVICES_DIR/$service"
+
+# If the service exists
+if [[ -d "$service_dir" ]]; then
+  # Expose stdout on fd 3
+  exec 3>&1
+
+  # Retrieve it
+  "$PLUSHU_ROOT/lib/plushook" update-dir "$service_dir" "$service" |
+  while read -a update; do
+    # If the service was not updated
+    if [[ -z "${update[1]}" ]]; then
+    #  mention the system declaring it to be up to date
+      echo "${update[0]}: $service is up to date"
+    fi
+  done
+fi

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+# Update each service to update
+for service in "$PLUSHU_SERVICES_DIR"/*; do
+  "$PLUSHU_ROOT/lib/plushook" update-service "${service##*/}"
+done

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+service=$1
+remote=$2
+
+service_dir=$PLUSHU_BUILDPACKS_DIR/$service
+
+# If the service doesn't already exist
+if [[ ! -e "$service_dir" ]]; then
+
+  # Retrieve it
+  "$PLUSHU_ROOT/lib/plushook" retrieve-dir "$service_dir" "$remote"
+
+  # If the service was not downloaded
+  if [[ ! -e "$service_dir" ]]; then
+    echo "URL could not be retrieved: $remote" >&2
+    exit 1
+  else
+    # Notify that the service has been installed
+    echo "Service '$service' installed."
+  fi
+fi

@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+# If a service name was specified
+if [[ -n $2 ]]; then
+
+  case "$2" in
+    git:*|ssh:*|*@*:*|http:*|https:*)
+      remote=$2
+      defname=${2#*:}
+      defname=${defname##*/}
+      ;;
+    */*)
+      remote=https://github.com/$2.git
+      defname=${2##*/}
+      ;;
+  esac
+
+  defname=${defname%.git}
+  service=$3
+  if [[ -z "$service" ]]; then
+    n=$(ls -f "$PLUSHU_SERVICES_DIR" | wc -l)
+    service=$(printf '%02i_%s' "$n" "$defname")
+  fi
+  service_dir="$PLUSHU_SERVICES_DIR/$service"
+
+  # If the service already exists
+  if [[ -e "$service_dir" ]]; then
+    cat >&2 <<EOF
+Service '$service' is already installed.
+EOF
+    exit 1
+
+  # If the service isn't already installed, install it
+  else
+    "$PLUSHU_ROOT/lib/plushook" install-service "$service" "$remote"
+  fi
+
+# If no service name was specified
+else
+  echo "Missing name of service to install" >&2
+  exit 1
+fi

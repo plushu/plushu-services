@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+service=$1
+service_dir=$PLUSHU_SERVICES_DIR/$service
+
+# If the service exists
+if [[ -d "$service_dir" ]]; then
+
+  # Remove the service
+  rm -rf "$service_dir"
+  echo "Service '$service' uninstalled."
+fi

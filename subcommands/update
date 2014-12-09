@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+# If at least one service name was specified
+if [[ -n "$2" ]]; then
+  services=()
+  # For each service specified
+  while [[ -n "$2" ]]; do
+    # If that service exists
+    if [[ -d "$PLUSHU_SERVICES_DIR/$2" ]]; then
+      # Add it to the update list
+      services+=("$PLUSHU_SERVICES_DIR/$2")
+
+    # If that service does not exist
+    else
+      echo "Service not found: $2" >&2
+      exit 1
+    fi
+    shift
+  done
+  # Update each service to update
+  for service in "${services[@]}"; do
+    "$PLUSHU_ROOT/lib/plushook" update-service "${service##*/}"
+  done
+# If no service name was specified
+else
+  # Update ALL the services
+  "$PLUSHU_ROOT/lib/plushook" update-all-services
+fi
