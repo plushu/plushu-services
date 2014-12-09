@@ -14,14 +14,17 @@ if [[ -n $2 ]]; then
       remote=https://github.com/$2.git
       defname=${2##*/}
       ;;
+    *)
+      defname=${2#plushu-}
+      defname=${defname%-service}
+      remote=https://github.com/plushu/plushu-$defname-service.git
+      ;;
   esac
-
+  defname=${defname#plushu-}
+  defname=${defname%-service}
   defname=${defname%.git}
-  service=$3
-  if [[ -z "$service" ]]; then
-    n=$(ls -f "$PLUSHU_SERVICES_DIR" | wc -l)
-    service=$(printf '%02i_%s' "$n" "$defname")
-  fi
+  service=${3:-$defname}
+  plugin_dir="$PLUSHU_PLUGINS_DIR/$plugin"
   service_dir="$PLUSHU_SERVICES_DIR/$service"
 
   # If the service already exists
