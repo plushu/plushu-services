@@ -24,7 +24,6 @@ if [[ -n $2 ]]; then
   defname=${defname%-service}
   defname=${defname%.git}
   service=${3:-$defname}
-  plugin_dir="$PLUSHU_PLUGINS_DIR/$plugin"
   service_dir="$PLUSHU_SERVICES_DIR/$service"
 
   # If the service already exists
