@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+mkdir -p "$2"
+
+if [[ "$EUID" == 0 ]]; then
+  chown "$PLUSHU_USER:" "$2"
+fi

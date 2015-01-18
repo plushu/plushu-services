@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+service=$1
+target_dir=$2
+
+"$PLUSHU_ROOT/lib/plushook" stop-service "$service" "$target_dir"
