@@ -4,7 +4,7 @@ set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
 service=$1
 remote=$2
 
-service_dir=$PLUSHU_BUILDPACKS_DIR/$service
+service_dir=$PLUSHU_SERVICES_DIR/$service
 
 # If the service doesn't already exist
 if [[ ! -e "$service_dir" ]]; then
